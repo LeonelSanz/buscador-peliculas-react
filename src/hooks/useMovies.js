@@ -1,8 +1,5 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo, useRef } from 'react';
 import { searchMovies } from '../services/movies.js';
-import { useRef } from 'react';
-import { useMemo } from 'react';
-import { useCallback } from 'react';
 
 export function useMovies({ search, sort }) {
     const [movies, setMovies] = useState([]);
