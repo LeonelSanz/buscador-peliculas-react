@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { searchMovies } from '../services/movies.js';
 import { useRef } from 'react';
 import { useMemo } from 'react';
+import { useCallback } from 'react';
 
 export function useMovies({ search, sort }) {
     const [movies, setMovies] = useState([]);
@@ -9,21 +10,19 @@ export function useMovies({ search, sort }) {
     const [error, setError] = useState(null);
     const previousSearch = useRef(search);
 
-    const getMovies = useMemo(() => {
-        return async ({ search }) => {
-            if (search === previousSearch.current) return;
+    const getMovies = useCallback(async ({ search }) => {
+        if (search === previousSearch.current) return;
 
-            try {
-                setLoading(true);
-                setError(null);
-                previousSearch.current = search;
-                const newMovies = await searchMovies({ search });
-                setMovies(newMovies);
-            } catch (e) {
-                setError(e.message);
-            } finally {
-                setLoading(false);
-            }
+        try {
+            setLoading(true);
+            setError(null);
+            previousSearch.current = search;
+            const newMovies = await searchMovies({ search });
+            setMovies(newMovies);
+        } catch (e) {
+            setError(e.message);
+        } finally {
+            setLoading(false);
         }
     }, []);
 
